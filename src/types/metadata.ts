@@ -2,11 +2,57 @@ export interface NFTMetadata {
     name: string;
     description: string;
     image: string;
-    attributes?: { trait_type: string; value: string | number }[];
+    deed: Deed;
 }
+
 export interface UserMetadata {
-    name: string;
+    username: string;
     email?: string;
     walletAddress?: string;
 }
-export type AllowedCollections = "nfts" | "users" | "properties" | "fts";
+
+export interface FTMetadata {
+    name: string;
+    email?: string;
+    symbol?: string;
+    walletAddress?: string;
+    totalSupply?: number;
+}
+export type AllowedCollections = "nfts" | "users" | "fts";
+
+export type Address = string;
+
+interface Tnx {
+  _id: string;
+  from: Address;
+  to: Address;
+  amount: number;
+  share: number;
+  timestamp: number; 
+}
+
+interface LocationPoint {
+  longitude: number;
+  latitude: number;
+}
+
+interface Side {
+  direction: Directions;
+  deedNumber: string;
+}
+
+interface Deed {
+  _id: string;
+  title?: Tnx[]; 
+  signedby: Address;
+  area: number;
+  value: number; 
+  location: LocationPoint[];
+  sides: Side[];
+  deedNumber: string;
+  landType: LandType;
+  timestamp: number;
+}
+
+type Directions = "North" | "South" | "East" | "West";
+type LandType = "Paddy land" | "Highland";
