@@ -1,3 +1,4 @@
+// src/services/pinata.service.ts
 import axios from "axios";
 import FormData from "form-data";
 import fs from "fs";
@@ -6,12 +7,10 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-
 const PINATA_BASE = "https://api.pinata.cloud/pinning";
 const PINATA_API_KEY = process.env.PINATA_API_KEY;
 const PINATA_API_SECRET = process.env.PINATA_API_SECRET;
 const PINATA_JWT = process.env.PINATA_JWT || null;
-
 
 function getAuthHeaders(contentType?: string) {
     const headers: Record<string, string> = {};
@@ -25,7 +24,7 @@ function getAuthHeaders(contentType?: string) {
     return headers;
 }
 
-
+// ---------------- Post file/image ----------------
 export async function uploadFileToIPFS(filePath: string, collection?: string): Promise<string> {
     const form = new FormData();
     form.append("file", fs.createReadStream(filePath));
@@ -35,22 +34,48 @@ export async function uploadFileToIPFS(filePath: string, collection?: string): P
     const headers = { ...getAuthHeaders(), ...form.getHeaders() } as any;
     const res = await axios.post(`${PINATA_BASE}/pinFileToIPFS`, form, { headers, maxContentLength: Infinity, maxBodyLength: Infinity });
 
-
     try { fs.unlinkSync(filePath); } catch {} // clean temp file
     return `ipfs://${res.data.IpfsHash}`;
 }
 
-
+// ---------------- Post JSON ----------------
 export async function uploadJSONToIPFS(json: object, collection?: string): Promise<string> {
     const headers = getAuthHeaders("application/json");
     const res = await axios.post(`${PINATA_BASE}/pinJSONToIPFS`, json, { headers });
     return `ipfs://${res.data.IpfsHash}`;
 }
 
-
+// ---------------- Get JSON ----------------
 export async function fetchJSONFromCID(cid: string): Promise<any> {
     const raw = cid.replace(/^ipfs:\/\//, "");
     const url = `https://gateway.pinata.cloud/ipfs/${raw}`;
     const res = await axios.get(url, { timeout: 10000 });
     return res.data;
+}
+
+// ---------------- Update JSON ----------------
+export async function updateJSONOnIPFS(oldCID: string, newJSON: object, collection?: string): Promise<string> {
+    const newCID = await uploadJSONToIPFS(newJSON, collection);
+    if (oldCID) await deleteFromIPFS(oldCID);
+    return newCID;
+}
+
+// ---------------- Update Image ----------------
+export async function updateFileOnIPFS(oldCID: string, filePath: string, collection?: string): Promise<string> {
+    const newCID = await uploadFileToIPFS(filePath, collection);
+    if (oldCID) await deleteFromIPFS(oldCID);
+    return newCID;
+}
+
+// ---------------- Delete / Unpin ----------------
+export async function deleteFromIPFS(cid: string): Promise<boolean> {
+    try {
+        const headers = getAuthHeaders();
+        const raw = cid.replace(/^ipfs:\/\//, "");
+        await axios.delete(`${PINATA_BASE}/unpin/${raw}`, { headers });
+        return true;
+    } catch (err) {
+        console.error("Error unpinning CID:", err);
+        return false;
+    }
 }
