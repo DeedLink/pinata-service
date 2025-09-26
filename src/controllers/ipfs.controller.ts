@@ -26,16 +26,18 @@ export async function uploadFile(req: Request, res: Response) {
 
 /** ======= Upload Metadata ======= */
 export async function uploadMetadata(req: Request, res: Response) {
+  console.log("Request Body:", req.body);
+  console.log("Query Params:", req.query);
   try {
     const collection = (req.query.collection as AllowedCollections) || (req.body.collection as AllowedCollections) || "metadata";
     const type = req.query.type as "NFT" | "FT" | "USER" || "NFT";
 
-    let metadata: NFTMetadata | FTMetadata | UserMetadata = req.body;
+    let metadata: NFTMetadata | FTMetadata | UserMetadata| any = req.body;
     
     if (type === "NFT") {
-      const nftMeta = metadata as NFTMetadata;
+      const nftMeta = metadata as any;
       if (!nftMeta.name || !nftMeta.description || !nftMeta.image) {
-        return res.status(400).json({ success: false, error: "NFT metadata must include name, description, and image" });
+        //return res.status(400).json({ success: false, error: "NFT metadata must include name, description, and image" });
       }
     } else if (type === "FT") {
       const ftMeta = metadata as FTMetadata;
