@@ -4,12 +4,10 @@
   "repository": "git@github.com:DeedLink/pinata-service.git",
   "author": "DulshanSiriwardhana <dulshansiriwardhana70@gmail.com>",
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "index.ts",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "build": "tsc",
-    "start": "node dist/index.js",
-    "vercel-build": "tsc"
+    "start": "node src/index.ts",
   },
   "dependencies": {
     "axios": "^1.11.0",
