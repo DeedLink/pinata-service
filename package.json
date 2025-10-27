@@ -5,11 +5,11 @@
   "author": "DulshanSiriwardhana <dulshansiriwardhana70@gmail.com>",
   "license": "MIT",
   "type": "module",
-  "main": "src/index.js",
+  "main": "index.js",
   "scripts": {
-    "dev": "node src/index.js",
     "start": "node src/index.js",
-    "vercel-build": "echo 'Vercel build completed'"
+    "dev": "nodemon src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "axios": "^1.11.0",
@@ -20,6 +20,6 @@
     "multer": "^2.0.2"
   },
   "devDependencies": {
-    "@vercel/node": "^3.0.0"
+    "nodemon": "^3.1.10"
   }
 }
