@@ -9,8 +9,8 @@ import {
   deleteFromIPFSController,
 } from "../controllers/ipfs.controller.js";
 
-const router = Router();
-const upload = multer({ dest: "uploads/" });
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 router.post("/upload/image", upload.single("file"), uploadFile);
 router.post("/upload/metadata", uploadMetadata);
