@@ -9,6 +9,7 @@ import {
   deleteFromIPFSController,
 } from "../controllers/ipfs.controller.js";
 
+const router = Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
