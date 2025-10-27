@@ -1,7 +1,7 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import ipfsRoutes from "./routes/ipfs.routes";
+import ipfsRoutes from "./routes/ipfs.routes.js";
 
 dotenv.config();
 
@@ -10,7 +10,7 @@ const app = express();
 app.use(cors({ origin: "*" }));
 app.use(express.json());
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/", (req, res) => {
   res.json({ status: "ok", message: "Pinata service is running" });
 });
 

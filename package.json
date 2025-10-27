@@ -4,10 +4,12 @@
   "repository": "git@github.com:DeedLink/pinata-service.git",
   "author": "DulshanSiriwardhana <dulshansiriwardhana70@gmail.com>",
   "license": "MIT",
-  "main": "src/index.ts",
+  "type": "module",
+  "main": "src/index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "start": "ts-node src/index.ts"
+    "dev": "node src/index.js",
+    "start": "node src/index.js",
+    "vercel-build": "echo 'Vercel build completed'"
   },
   "dependencies": {
     "axios": "^1.11.0",
@@ -15,16 +17,9 @@
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "form-data": "^4.0.4",
-    "multer": "^2.0.2",
-    "ts-node": "^10.9.2"
+    "multer": "^2.0.2"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.4",
-    "@types/multer": "^2.0.0",
-    "@types/node": "^24.9.1",
-    "@vercel/node": "^3.0.0",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.9.3"
+    "@vercel/node": "^3.0.0"
   }
 }
